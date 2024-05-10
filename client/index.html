@@ -3,10 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>life social</title>
+    ,
+    <link rel="stylesheet" href="style.css" />
+    <title>life social 👫</title>
   </head>
   <body>
-    <h1>App Hello</h1>
-    <p>let go together</p>
+    <div id="gridContainer">
+      <div id="messgae"><ul id="message"></ul></div>
+      <div>
+        <form id="grpMsgForm">
+          <input id="grpMsgInput" />
+          <button>Send to all</button>
+        </form>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="/script.js" defer></script>
   </body>
 </html>
