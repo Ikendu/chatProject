@@ -10,20 +10,25 @@ const io = new Server(server);
 app.use(express.static("client"));
 
 io.on("connection", (socket) => {
-    console.log(`A new user connected with ${socket.id}`);
-    socket.on('new user', (user) => {
-        socket.broadcast.emit('new user', user)
-    })
-  socket.broadcast.emit("new user", socket.id);
+  console.log(`A new user connected with ${socket.id}`);
 
-  socket.on("group message", (msg) => {
+  socket.on("new user", (user) => {
+    console.log(`${user} has connected with ${socket.id}`);
+    socket.broadcast.emit("new user", user);
+    socket.nickname = user;
+  });
+
+  socket.broadcast.emit("new user", socket.nickname);
+
+  socket.on("group message", (nickname, msg) => {
     console.log(msg);
-    io.emit("group message", msg);
+    io.emit("group message", nickname, msg);
   });
 
   socket.on("disconnect", () => {
-    console.log(`User with ${socket.id} has disconnected`);
-    socket.broadcast.emit("user disconnected", socket.id);
+    socket.broadcast.emit("user left", socket.nickname);
+    //   console.log(`User with ${socket.id} has disconnected`);
+    //     socket.broadcast.emit("user disconnected", socket.id);
   });
 });
 
