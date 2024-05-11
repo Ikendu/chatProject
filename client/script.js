@@ -19,11 +19,20 @@ const messaging = (message, msg) => {
   message.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 };
+const newConnection = (nickname) => {
+  const user = document.getElementById("newUserConnection");
+  user.innerText = `Welcome ${nickname}`;
+  //   alert(`A new user ${nickname} has joined the group`);
+};
 
 socket.on("connect", () => {
-  console.log(`a client user with ${socket.id} connected`);
-  socket.on("new user", (id) => {
-    alert(`A new user with id ${id} has joined`);
+  //   console.log(`a client user with ${socket.id} connected`);
+  socket.nickname = prompt("Enter your nickname", "Nicky");
+  newConnection(socket.nickname);
+  socket.emit("new user", socket.nickname);
+
+  socket.on("new user", (nickname) => {
+    alert(`${nickname} has joined`);
   });
 
   socket.on("group message", (msg) => {

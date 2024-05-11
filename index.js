@@ -10,7 +10,10 @@ const io = new Server(server);
 app.use(express.static("client"));
 
 io.on("connection", (socket) => {
-  console.log(`A new user connected with ${socket.id}`);
+    console.log(`A new user connected with ${socket.id}`);
+    socket.on('new user', (user) => {
+        socket.broadcast.emit('new user', user)
+    })
   socket.broadcast.emit("new user", socket.id);
 
   socket.on("group message", (msg) => {
