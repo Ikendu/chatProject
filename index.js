@@ -18,11 +18,11 @@ io.on("connection", (socket) => {
     socket.nickname = user;
   });
 
-  socket.broadcast.emit("new user", socket.nickname);
+  socket.broadcast.emit("new user", socket.nickname, socket.id);
 
   socket.on("group message", (nickname, msg) => {
     console.log(msg);
-    io.emit("group message", nickname, msg);
+    socket.broadcast.emit("group message", nickname, msg);
   });
 
   socket.on("disconnect", () => {

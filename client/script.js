@@ -26,13 +26,15 @@ socket.on("connect", () => {
     e.preventDefault();
     if (input.value) {
       const msg = input.value;
+      messaging(messages, "Me", msg);
       socket.emit("group message", socket.nickname, msg);
       input.value = "";
     }
   };
 
-  socket.on("new user", (nickname) => {
+  socket.on("new user", (nickname, id) => {
     if (nickname) alert(`${nickname} has joined`);
+    socket.otherId = id;
   });
 
   socket.on("group message", (nickname, msg) => {
