@@ -15,6 +15,7 @@ const newConnection = (nickname) => {
   user.innerText = `Hello ${nickname}, you are welcome`;
   //   alert(`A new user ${nickname} has joined the group`);
 };
+const userTyping = () => {};
 
 socket.on("connect", () => {
   //   console.log(`a client user with ${socket.id} connected`);
@@ -43,6 +44,31 @@ socket.on("connect", () => {
 
   socket.on("user left", (nickname) => {
     alert(`${nickname} has left the chat`);
+  });
+
+  input.oninput = () => {
+    socket.emit("userTyping", socket.nickname);
+  };
+  socket.on("userTyping", (username) => {
+    const typing = document.getElementById("typing");
+    typing.innerText = `${username} is typing`;
+  });
+  input.onchange = () => {
+    socket.emit("userNotTyping");
+  };
+  socket.on("userNotTyping", () => {
+    const typing = document.getElementById("typing");
+    typing.innerText = ``;
+  });
+
+  socket.on("allUsersList", (allUsers) => {
+    const connectedUsers = document.getElementById("connectedUsers");
+    connectedUsers.innerHTML = "";
+    for (key in allUsers) {
+      let user = document.createElement("li");
+      user.innerText = allUsers[key];
+      connectedUsers.appendChild(user);
+    }
   });
 
   //   socket.on("user disconnected", (id) => {
