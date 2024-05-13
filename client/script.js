@@ -1,4 +1,5 @@
 const socket = io();
+const usersTalkingPrivately = {};
 
 const messages = document.getElementById("messages");
 const form = document.getElementById("grpMsgForm");
@@ -71,15 +72,43 @@ socket.on("connect", () => {
       user.innerText = allUsers[id];
       connectedUsers.appendChild(user);
 
+      //private message component
       const sendMsgBtn = document.createElement("button");
-      sendMsgBtn.innerHTML = "Private chat👩🏽‍🤝‍🧑🏾";
+      sendMsgBtn.innerText = "Private chat👩🏽‍🤝‍🧑🏾";
       const cantSendMsg = document.createElement("span");
-      cantSendMsg.innerHTML = "Self✌";
+      cantSendMsg.innerText = "Self✌";
       if (socket.id !== id) {
         connectedUsers.appendChild(sendMsgBtn);
       } else {
         connectedUsers.appendChild(cantSendMsg);
       }
+      const privateMsgs = document.getElementById("privateMsgs");
+      sendMsgBtn.onclick = () => {
+        if (!usersTalkingPrivately[id]) {
+          alert("private chat created");
+          usersTalkingPrivately[id] = nickname;
+
+          const privMsgArea = document.createElement("ul");
+          privMsgArea.id = id;
+          privMsgArea.classList.add("privMsg");
+
+          const privHeading = document.createElement("h1");
+          privHeading.innerText = `Message between you and ${nickname}`;
+
+
+          const input = docment.createElement("input");
+
+          const sendBtn = document.createElement("button");
+          sendBtn.type = "submit";
+          sendBtn.innerText = "Send";
+
+          privMsgArea.appendChild(privHeading);
+          privMsgArea.appendChild(input)
+          
+        } else {
+          alert(`You are already chatting with ${nickname}`);
+        }
+      };
     }
   });
 
