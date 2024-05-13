@@ -95,7 +95,6 @@ socket.on("connect", () => {
           const privHeading = document.createElement("h1");
           privHeading.innerText = `Message between you and ${nickname}`;
 
-
           const input = docment.createElement("input");
 
           const sendBtn = document.createElement("button");
@@ -103,8 +102,18 @@ socket.on("connect", () => {
           sendBtn.innerText = "Send";
 
           privMsgArea.appendChild(privHeading);
-          privMsgArea.appendChild(input)
-          
+          privMsgArea.appendChild(input);
+          privMsgArea.appendChild(sendBtn);
+
+          privateMsgs.appendChild(privMsgArea);
+
+          sendBtn.onclick = (e) => {
+            e.preventDefault();
+            const msg = input.value;
+            socket.emit("sendPrivateMsg", msg, socket.id, id, socket.nickname);
+            const msgArea = getElementById(id);
+            messaging(msgArea, "ME: ", msg);
+          };
         } else {
           alert(`You are already chatting with ${nickname}`);
         }
