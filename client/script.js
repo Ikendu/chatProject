@@ -86,8 +86,8 @@ socket.on("connect", () => {
       const privateMsgs = document.getElementById("privateMsgs");
       sendMsgBtn.onclick = () => {
         if (!usersTalkingPrivately[id]) {
-          alert("private chat created");
           usersTalkingPrivately[id] = nickname;
+          console.log(usersTalkingPrivately);
 
           const privMsgArea = document.createElement("ul");
           privMsgArea.id = id;
@@ -136,7 +136,7 @@ socket.on("connect", () => {
 
       const sendBtn = document.createElement("button");
       sendBtn.type = "submit";
-      sendBtn.innerText = send;
+      sendBtn.innerText = "Send";
 
       privMsgArea.appendChild(privHeading);
       privMsgArea.appendChild(input);
@@ -144,12 +144,12 @@ socket.on("connect", () => {
 
       privateMsgs.appendChild(privMsgArea);
 
-      messaging(privateMsg, senderName, msg);
+      messaging(privMsgArea, senderName, msg);
 
       sendBtn.onclick = (e) => {
         e.preventDefault();
         const msg = input.value;
-        const msgArea = docment.getElementById(senderID);
+        const msgArea = document.getElementById(senderID);
         messaging(msgArea, "Me: ", msg);
         socket.emit(
           "sendPrivateMsg",
