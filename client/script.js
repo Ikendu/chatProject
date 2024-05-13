@@ -20,8 +20,10 @@ const userTyping = () => {};
 socket.on("connect", () => {
   //   console.log(`a client user with ${socket.id} connected`);
   socket.nickname = prompt("Enter your nickname", "Nicky");
-  newConnection(socket.nickname);
-  socket.emit("new user", socket.nickname);
+  if (socket.nickname) {
+    newConnection(socket.nickname);
+    socket.emit("new user", socket.nickname);
+  }
 
   form.onsubmit = (e) => {
     e.preventDefault();
@@ -64,10 +66,20 @@ socket.on("connect", () => {
   socket.on("allUsersList", (allUsers) => {
     const connectedUsers = document.getElementById("connectedUsers");
     connectedUsers.innerHTML = "";
-    for (key in allUsers) {
+    for (id in allUsers) {
       let user = document.createElement("li");
-      user.innerText = allUsers[key];
+      user.innerText = allUsers[id];
       connectedUsers.appendChild(user);
+
+      const sendMsgBtn = document.createElement("button");
+      sendMsgBtn.innerHTML = "Private chat👩🏽‍🤝‍🧑🏾";
+      const cantSendMsg = document.createElement("span");
+      cantSendMsg.innerHTML = "Self✌";
+      if (socket.id !== id) {
+        connectedUsers.appendChild(sendMsgBtn);
+      } else {
+        connectedUsers.appendChild(cantSendMsg);
+      }
     }
   });
 
