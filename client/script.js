@@ -68,16 +68,17 @@ socket.on("connect", () => {
     const connectedUsers = document.getElementById("connectedUsers");
     connectedUsers.innerHTML = "";
     for (id in allUsers) {
+      const nickname = allUsers[id];
       let user = document.createElement("li");
-      user.innerText = allUsers[id];
+      user.innerText = nickname;
       connectedUsers.appendChild(user);
 
       //private message component
       const sendMsgBtn = document.createElement("button");
-      sendMsgBtn.innerText = "Private chat👩🏽‍🤝‍🧑🏾";
+      sendMsgBtn.innerText = `Private chat with ${nickname}`;
       const cantSendMsg = document.createElement("span");
-      cantSendMsg.innerText = "Self✌";
-      if (socket.id !== id) {
+      cantSendMsg.innerText = "No self messaging";
+      if (id !== socket.id) {
         connectedUsers.appendChild(sendMsgBtn);
       } else {
         connectedUsers.appendChild(cantSendMsg);
@@ -95,7 +96,7 @@ socket.on("connect", () => {
           const privHeading = document.createElement("h1");
           privHeading.innerText = `Message between you and ${nickname}`;
 
-          const input = docment.createElement("input");
+          const input = document.createElement("input");
 
           const sendBtn = document.createElement("button");
           sendBtn.type = "submit";
@@ -111,8 +112,9 @@ socket.on("connect", () => {
             e.preventDefault();
             const msg = input.value;
             socket.emit("sendPrivateMsg", socket.id, id, socket.nickname, msg);
-            const msgArea = getElementById(id);
+            const msgArea = document.getElementById(id);
             messaging(msgArea, "ME: ", msg);
+            input.value = "";
           };
         } else {
           alert(`You are already chatting with ${nickname}`);
@@ -143,8 +145,23 @@ socket.on("connect", () => {
       privateMsgs.appendChild(privMsgArea);
 
       messaging(privateMsg, senderName, msg);
+
+      sendBtn.onclick = (e) => {
+        e.preventDefault();
+        const msg = input.value;
+        const msgArea = docment.getElementById(senderID);
+        messaging(msgArea, "Me: ", msg);
+        socket.emit(
+          "sendPrivateMsg",
+          socket.id,
+          senderID,
+          socket.nickname,
+          msg
+        );
+        input.value = "";
+      };
     } else {
-      const msgArea = docment.getElementById(senderID);
+      const msgArea = document.getElementById(senderID);
       messaging(msgArea, senderName, msg);
     }
   });
