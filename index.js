@@ -39,6 +39,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("userNotTyping");
   });
 
+  socket.on("sendPrivateMsg", (senderID, recID, snederName, msg) => {
+    io.to(recID).emit("recPrivateMsg", senderID, snederName, msg);
+  });
+
   socket.on("disconnect", () => {
     socket.broadcast.emit("user left", socket.nickname);
     delete allUsers[socket.id];

@@ -110,7 +110,7 @@ socket.on("connect", () => {
           sendBtn.onclick = (e) => {
             e.preventDefault();
             const msg = input.value;
-            socket.emit("sendPrivateMsg", msg, socket.id, id, socket.nickname);
+            socket.emit("sendPrivateMsg", socket.id, id, socket.nickname, msg);
             const msgArea = getElementById(id);
             messaging(msgArea, "ME: ", msg);
           };
@@ -118,6 +118,34 @@ socket.on("connect", () => {
           alert(`You are already chatting with ${nickname}`);
         }
       };
+    }
+  });
+  socket.on("recPrivateMsg", (senderID, senderName, msg) => {
+    if (!usersTalkingPrivately[senderID]) {
+      usersTalkingPrivately[senderID] = senderName;
+      const privMsgArea = document.createElement("ul");
+      privMsgArea.id = senderID;
+      privMsgArea.classList.add("privMsg");
+
+      const privHeading = document.createElement("h1");
+      privHeading.innerText = `Message between you and ${senderName}`;
+
+      const input = document.createElement("input");
+
+      const sendBtn = document.createElement("button");
+      sendBtn.type = "submit";
+      sendBtn.innerText = send;
+
+      privMsgArea.appendChild(privHeading);
+      privMsgArea.appendChild(input);
+      privMsgArea.appendChild(sendBtn);
+
+      privateMsgs.appendChild(privMsgArea);
+
+      messaging(privateMsg, senderName, msg);
+    } else {
+      const msgArea = docment.getElementById(senderID);
+      messaging(msgArea, senderName, msg);
     }
   });
 
