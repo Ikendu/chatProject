@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
   <body>
@@ -13,13 +13,14 @@
       <div id="chatApp">
         <ul id="messages"></ul>
       </div>
-      <div >
+      <div>
         <form id="grpMsgForm">
-          <input id="grpMsgInput"/>
+          <input id="grpMsgInput" />
+          <button>Send to all</button>
         </form>
       </div>
     </div>
     <script src="/socket.io/socket.io.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="/script.js" defer></script>
   </body>
 </html>

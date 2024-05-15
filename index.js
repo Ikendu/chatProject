@@ -19,4 +19,4 @@ io.on("connection", (socket) => {
 });
 
 const port = 3000;
-app.listen(port, () => console.log(`connected at post ${port}`));
+server.listen(port, () => console.log(`connected at post ${port}`));

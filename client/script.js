@@ -1,4 +1,4 @@
-const socket = io.on();
+const socket = io();
 
 socket.on("connect", () => {
   console.log(`connected with ${socket.id}`);
