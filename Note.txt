@@ -1,0 +1,22 @@
+//conneting socket.io client and server side
+
+//server
+const express = require('express')
+const http = require('http')
+const app = express()
+const server = http.createServer(app)
+
+const {Server} = require('socket.io')
+const io = new Server(server)
+io.on('connection', (socket)=>{
+
+})
+
+//client
+const socket = io
+io.on('connect',(socket)=>{
+  console.log(you are connected with socket.id)
+  socket.on('new connect', (value1, value2,...)=>{})
+  socket.emit(new connect', value1, value2,...)
+
+})
