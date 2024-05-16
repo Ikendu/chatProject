@@ -16,6 +16,9 @@ io.on("connection", (socket) => {
   socket.on("checker", (name) => {
     console.log(`my name is ${name}`);
   });
+  socket.on("disconnect", () => {
+    console.log(`A user with ID ${socket.id} disconnected`);
+  });
 });
 
 const port = 3000;
