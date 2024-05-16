@@ -16,17 +16,13 @@ io.on("connection", (socket) => {
   //alert others when a user disconnects
   socket.broadcast.emit("new user", socket.id);
 
-  socket.on("checker", (name) => {
-    console.log(`my name is ${name}`);
-  });
-
   socket.on("group message", (msg) => {
     io.emit("group message", msg);
   });
   socket.on("disconnect", () => {
     console.log(`A user with ID ${socket.id} disconnected`);
     //alert others when a user disconnects
-    socket.broadcast.emit("user left", socket.id);
+    socket.broadcast.emit("user disconnect", socket.id);
   });
 });
 

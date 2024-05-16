@@ -15,7 +15,9 @@ const messaging = (msgArea, msg) => {
 //create socket.io connection
 socket.on("connect", () => {
   console.log(`connected with ${socket.id}`);
-  socket.emit("checker", "Ikendu");
+  socket.on("new user", (user) => {
+    alert(`A new user connected with ${user}`);
+  });
 
   //send group message to server
   form.onsubmit = (e) => {
@@ -29,5 +31,9 @@ socket.on("connect", () => {
   //display message for all users
   socket.on("group message", (msg) => {
     messaging(messages, msg);
+  });
+
+  socket.on("user disconnect", (user) => {
+    alert(`A user with id ${user} has disconnected`);
   });
 });
