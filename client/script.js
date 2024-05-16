@@ -11,14 +11,15 @@ const messaging = (msgArea, msg) => {
   msgArea.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 };
+
 //create socket.io connection
 socket.on("connect", () => {
   console.log(`connected with ${socket.id}`);
   socket.emit("checker", "Ikendu");
-//send group message to server
+
+  //send group message to server
   form.onsubmit = (e) => {
     e.preventDefault();
-
     if (input.value) {
       const msg = input.value;
       socket.emit("group message", msg);

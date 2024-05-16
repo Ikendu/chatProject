@@ -13,6 +13,9 @@ app.use(express.static("client"));
 
 io.on("connection", (socket) => {
   console.log(`A user connected with ${socket.id}`);
+  //alert others when a user disconnects
+  socket.broadcast.emit("new user", socket.id);
+
   socket.on("checker", (name) => {
     console.log(`my name is ${name}`);
   });
@@ -22,6 +25,8 @@ io.on("connection", (socket) => {
   });
   socket.on("disconnect", () => {
     console.log(`A user with ID ${socket.id} disconnected`);
+    //alert others when a user disconnects
+    socket.broadcast.emit("user left", socket.id);
   });
 });
 
