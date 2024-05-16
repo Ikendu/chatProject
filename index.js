@@ -16,6 +16,10 @@ io.on("connection", (socket) => {
   socket.on("checker", (name) => {
     console.log(`my name is ${name}`);
   });
+
+  socket.on("group message", (msg) => {
+    socket.broadcast.emit("group message", msg);
+  });
   socket.on("disconnect", () => {
     console.log(`A user with ID ${socket.id} disconnected`);
   });
