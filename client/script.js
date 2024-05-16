@@ -4,6 +4,13 @@ const messages = document.getElementById("messages");
 const input = document.getElementById("grpMsgInput");
 const form = document.getElementById("grpMsgForm");
 
+socket.nickname = prompt("Enter you nickname");
+
+const newConnection = (nickname) => {
+  const newuser = document.getElementById("newUser");
+  newuser.innerText = `Welcome ${nickname}`;
+};
+
 //display message for all users
 const messaging = (msgArea, msg) => {
   const item = document.createElement("li");
@@ -15,8 +22,12 @@ const messaging = (msgArea, msg) => {
 //create socket.io connection
 socket.on("connect", () => {
   console.log(`connected with ${socket.id}`);
+
+  newConnection(socket.nickname);
+  socket.emit("new user", socket.nickname);
+
   socket.on("new user", (user) => {
-    alert(`A new user connected with ${user}`);
+    alert(`${user} has has joined the chat`);
   });
 
   //send group message to server

@@ -19,6 +19,11 @@ io.on("connection", (socket) => {
   socket.on("group message", (msg) => {
     io.emit("group message", msg);
   });
+
+  socket.on("new user", (nickname) => {
+    console.log(`A user ${nickname} with id ${socket.id} just connected`);
+    socket.broadcast.emit('new user', nickname)
+  });
   socket.on("disconnect", () => {
     console.log(`A user with ID ${socket.id} disconnected`);
     //alert others when a user disconnects
@@ -26,5 +31,5 @@ io.on("connection", (socket) => {
   });
 });
 
-const port = 3000;
+const port = 3001;
 server.listen(port, () => console.log(`connected at post ${port}`));
