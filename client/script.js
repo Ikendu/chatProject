@@ -31,6 +31,17 @@ socket.on("connect", () => {
     alert(`${user} has has joined the chat`);
   });
 
+  socket.on("users list", (listOfUsers) => {
+    const connectedUsers = document.getElementById("connectedUsers");
+    connectedUsers.innerHTML = "";
+    for (const id in listOfUsers) {
+      const nickname = listOfUsers[id];
+      const user = document.createElement("li");
+      user.innerText = nickname;
+      connectedUsers.appendChild(user);
+    }
+  });
+
   const isTyping = document.getElementById("typing");
   input.oninput = () => {
     socket.emit("isTyping", socket.nickname);

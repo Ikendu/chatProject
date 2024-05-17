@@ -11,6 +11,8 @@ app.use(express.static("client"));
 //   res.sendFile(__dirname + "/client/");
 // });
 
+const connectedUsers = {};
+
 io.on("connection", (socket) => {
   console.log(`A user connected with ${socket.id}`);
 
@@ -19,6 +21,9 @@ io.on("connection", (socket) => {
     socket.nickname = nickname;
     console.log(`A user ${nickname} with id ${socket.id} just connected`);
     socket.broadcast.emit("new user", nickname);
+    if (socket.nickname) connectedUsers[socket.id] = socket.nickname;
+    io.emit("users list", connectedUsers);
+    console.log("Connected Users", connectedUsers);
   });
 
   socket.on("group message", (nickname, msg) => {
@@ -37,6 +42,9 @@ io.on("connection", (socket) => {
     console.log(`A user with ID ${socket.id} disconnected`);
     //alert others when a user disconnects
     socket.broadcast.emit("user disconnect", socket.id, socket.nickname);
+    delete connectedUsers[socket.id];
+    io.emit("users list", connectedUsers);
+    console.log("Connected User", connectedUsers);
   });
 });
 
