@@ -16,6 +16,7 @@ const messaging = (msgArea, name, msg) => {
   const item = document.createElement("li");
   item.textContent = `${name}: ${msg}`;
   msgArea.appendChild(item);
+
   window.scrollTo(0, document.body.scrollHeight);
 };
 
@@ -28,6 +29,22 @@ socket.on("connect", () => {
 
   socket.on("new user", (user) => {
     alert(`${user} has has joined the chat`);
+  });
+
+  const isTyping = document.getElementById("typing");
+  input.oninput = () => {
+    socket.emit("isTyping", socket.nickname);
+  };
+
+  socket.on("isTyping", (user) => {
+    isTyping.innerText = `${user} is typing`;
+  });
+
+  input.onchange = () => {
+    socket.emit("userNotType", socket.nickname);
+  };
+  socket.on("userNotType", () => {
+    isTyping.innerText = "gg";
   });
 
   //send group message to serv
