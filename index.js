@@ -25,6 +25,14 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("group message", nickname, msg);
   });
 
+  socket.on("isTyping", (user) => {
+    socket.broadcast.emit("isTyping", user);
+  });
+
+  socket.on("userNotType", (user) => {
+    socket.broadcast.emit("userNotType");
+  });
+
   socket.on("disconnect", () => {
     console.log(`A user with ID ${socket.id} disconnected`);
     //alert others when a user disconnects
