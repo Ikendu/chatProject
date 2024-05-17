@@ -1,4 +1,5 @@
 const socket = io();
+const usersTalkingPrivately = {};
 
 const messages = document.getElementById("messages");
 const input = document.getElementById("grpMsgInput");
@@ -50,6 +51,61 @@ socket.on("connect", () => {
       } else {
         connectedUsers.appendChild(sendPrvMsg);
       }
+
+      //create private chat
+      const privateMsgs = document.getElementById("privateMsgs");
+      sendPrvMsg.onclick = () => {
+        if (!usersTalkingPrivately[id]) {
+          usersTalkingPrivately[id] = nickname;
+
+          //create mesg area
+          const privMsgArea = document.createElement("ul");
+          privMsgArea.id = id;
+          privMsgArea.classList.add("privMsg");
+
+          //create heading for each message
+          const privHeading = document.createElement("h1");
+          privHeading.innerText = `Mesages between you and ${nickname}`;
+
+          //create input area
+          const input = document.createElement("input");
+          //create button
+          const sendBtn = document.createElement("button");
+          sendBtn.type = "submit";
+          sendBtn.innerText = "Send";
+
+          //append and build private message area
+          privMsgArea.appendChild(privHeading);
+          privMsgArea.appendChild(input);
+          privMsgArea.appendChild(sendBtn);
+          privateMsgs.appendChild(privMsgArea);
+
+          sendBtn.onclick = (e) => {
+            e.preventDefault();
+            const msg = input.value;
+            socket.emit("privateMsg", socket.id, id, socket.nickname, msg);
+            messaging(privMsgArea, "Me", msg);
+            input.value = "";
+          };
+        } else {
+          alert(`Already connected with ${nickname}`);
+        }
+      };
+    }
+  });
+
+  socket.on("recMessage", (senderID, senderName, msg) => {
+    if (!usersTalkingPrivately[id]) {
+      usersTalkingPrivately[id] = senderName;
+
+      //create msg area
+      const privMsgArea = document.createElement("ul");
+      privMsgArea.id = senderID;
+      privMsgArea.classList.add("privMsg");
+
+      //create header for the message
+      const privHeading = document.createElement("h1");
+      privHeading.innerText = `Message between you and ${senderName}`;
     }
   });
 

@@ -38,6 +38,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("userNotType");
   });
 
+  socket.on("privateMsg", (senderID, recID, senderName, msg) => {
+    socket.to(recID).emit("recMessage", senderID, senderName, msg);
+  });
+
   socket.on("disconnect", () => {
     console.log(`A user with ID ${socket.id} disconnected`);
     //alert others when a user disconnects
