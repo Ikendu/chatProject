@@ -39,6 +39,17 @@ socket.on("connect", () => {
       const user = document.createElement("li");
       user.innerText = nickname;
       connectedUsers.appendChild(user);
+
+      //display private message button
+      const sendPrvMsg = document.createElement("button");
+      sendPrvMsg.innerText = "Send Message";
+      const yourSelf = document.createElement("span");
+      yourSelf.innerText = "Yourself";
+      if (id === socket.id) {
+        connectedUsers.appendChild(yourSelf);
+      } else {
+        connectedUsers.appendChild(sendPrvMsg);
+      }
     }
   });
 
