@@ -37,7 +37,7 @@ socket.on("connect", () => {
       const msg = input.value;
       socket.emit("group message", socket.nickname, msg);
       messaging(messages, "Me: ", msg);
-      input.value = "hello";
+      input.value = "";
     }
   };
   //display message for all users
