@@ -44,7 +44,7 @@ socket.on("connect", () => {
     socket.emit("userNotType", socket.nickname);
   };
   socket.on("userNotType", () => {
-    isTyping.innerText = "gg";
+    isTyping.innerText = "";
   });
 
   //send group message to serv
