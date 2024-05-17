@@ -95,17 +95,44 @@ socket.on("connect", () => {
   });
 
   socket.on("recMessage", (senderID, senderName, msg) => {
-    if (!usersTalkingPrivately[id]) {
-      usersTalkingPrivately[id] = senderName;
+    if (!usersTalkingPrivately[senderID]) {
+      usersTalkingPrivately[senderID] = senderName;
 
       //create msg area
       const privMsgArea = document.createElement("ul");
       privMsgArea.id = senderID;
       privMsgArea.classList.add("privMsg");
 
+      //create input and send button
+      const input = document.createElement("input");
+      const sendBtn = document.createElement("button");
+      sendBtn.type = "submit";
+      sendBtn.innerText = "Send";
+
       //create header for the message
       const privHeading = document.createElement("h1");
       privHeading.innerText = `Message between you and ${senderName}`;
+
+      //append and build the message area
+      privMsgArea.appendChild(privHeading);
+      privMsgArea.appendChild(input);
+      privMsgArea.appendChild(sendBtn);
+      privateMsgs.appendChild(privMsgArea);
+
+      //display sender message
+      messaging(privMsgArea, senderName, msg);
+
+      //reply sender message
+      sendBtn.onclick = (e) => {
+        e.preventDefault();
+        const msg = input.value;
+        const msgArea = document.getElementById(senderID);
+        messaging(msgArea, "Me", msg);
+        socket.emit("privateMsg", socket.id, senderID, socket.nickname, msg);
+      };
+    } else {
+      const mesgArea = document.getElementById(senderID);
+      messaging(mesgArea, senderName, msg);
     }
   });
 
