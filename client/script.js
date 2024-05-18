@@ -94,6 +94,7 @@ socket.on("connect", () => {
     }
   });
 
+  // recieving private chat
   socket.on("recMessage", (senderID, senderName, msg) => {
     if (!usersTalkingPrivately[senderID]) {
       usersTalkingPrivately[senderID] = senderName;
@@ -129,6 +130,7 @@ socket.on("connect", () => {
         const msgArea = document.getElementById(senderID);
         messaging(msgArea, "Me", msg);
         socket.emit("privateMsg", socket.id, senderID, socket.nickname, msg);
+        input.value = "";
       };
     } else {
       const mesgArea = document.getElementById(senderID);
