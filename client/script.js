@@ -83,7 +83,9 @@ socket.on("connect", () => {
           sendBtn.onclick = (e) => {
             e.preventDefault();
             const msg = input.value;
-            socket.emit("privateMsg", socket.id, id, socket.nickname, msg);
+            if (msg) {
+              socket.emit("privateMsg", socket.id, id, socket.nickname, msg);
+            }
             messaging(privMsgArea, "Me", msg);
             input.value = "";
           };
@@ -127,8 +129,11 @@ socket.on("connect", () => {
       sendBtn.onclick = (e) => {
         e.preventDefault();
         const msg = input.value;
-        const msgArea = document.getElementById(senderID);
-        messaging(msgArea, "Me", msg);
+        if (msg) {
+          const msgArea = document.getElementById(senderID);
+          messaging(msgArea, "Me", msg);
+        }
+
         socket.emit("privateMsg", socket.id, senderID, socket.nickname, msg);
         input.value = "";
       };
