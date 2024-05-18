@@ -56,6 +56,9 @@
   display: grid;
   grid-template-columns: 30% 70%;
 }
+#connectedUsers > button {
+  cursor: pointer;
+}
 
 #privateMsgs {
   padding-bottom: 30%;
