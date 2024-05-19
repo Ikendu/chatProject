@@ -3,13 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <link rel="stylesheet" href="/group.css" />
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="/group.js" defer></script>
+
+    <title><%= name %> Group 😏😊</title>
   </head>
   <body>
-    <h1>Young messengers</h1>
-    <button id="createGrp">Private Group</button>
-
+    <h1><%= name %> Group</h1>
+    <h3>You are welcome</h3>
     <div id="gridContainer">
       <div id="chatApp">
         <p id="connectionStatus"></p>
@@ -20,7 +22,6 @@
         <h1>Connected Users</h1>
         <ul id="connectedUsers"></ul>
       </div>
-      <form id="privateMsgs"></form>
       <div>
         <form id="grpMsgForm">
           <input id="grpMsgInput" />
@@ -28,7 +29,5 @@
         </form>
       </div>
     </div>
-    <script src="/socket.io/socket.io.js" defer></script>
-    <script src="/script.js" defer></script>
   </body>
 </html>

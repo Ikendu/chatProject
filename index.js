@@ -2,14 +2,29 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+const { Server, Namespace } = require("socket.io");
+const { v4: generateRandomId } = require("uuid");
+
 const io = new Server(server);
 
 app.use(express.static("client"));
 
-// app.get("/", (req, res) => {
-//   res.sendFile(__dirname + "/client/");
-// });
+app.set("view engine", "ejs");
+
+//generate an id for a new group
+app.get("/privgroup/:name", (req, res) => {
+  const name = req.params.name;
+  const grpid = generateRandomId();
+  res.redirect(`/privgroup/${name}/${grpid}`);
+  // res.sendFile(__dirname + "/client/private.html");
+});
+//redirected to the new gruop
+app.get("/privgroup/:name/:grpid", (req, res) => {
+  const name = req.params.name;
+  const grpid = req.params.grpid;
+
+  res.render(`group`, { name, grpid });
+});
 
 const connectedUsers = {};
 
@@ -49,6 +64,23 @@ io.on("connection", (socket) => {
     delete connectedUsers[socket.id];
     io.emit("users list", connectedUsers);
     console.log("Connected User", connectedUsers);
+  });
+});
+
+// creating and connecting to a new Namespace
+io.of("privgroup").on("connection", (socket) => {
+  console.log(`New privated group created with ${socket.id}`);
+
+  socket.on("new user", (username) => {
+    console.log(`${username} has joined the group`);
+    socket.broadcast.emit("new user", username);
+  });
+
+  socket.on("is typing", (username) => {
+    socket.broadcast.emit("is typing", username);
+  });
+  socket.on("not typing", (username) => {
+    socket.broadcast.emit("not typing", username);
   });
 });
 
