@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+const { Server, Namespace } = require("socket.io");
 const { v4: generateRandomId } = require("uuid");
 
 const io = new Server(server);
@@ -18,7 +18,7 @@ app.get("/privgroup/:name", (req, res) => {
   res.redirect(`/privgroup/${name}/${grpid}`);
   // res.sendFile(__dirname + "/client/private.html");
 });
-//redirected to the new group
+//redirected to the new gruop
 app.get("/privgroup/:name/:grpid", (req, res) => {
   const name = req.params.name;
   const grpid = req.params.grpid;
@@ -27,10 +27,6 @@ app.get("/privgroup/:name/:grpid", (req, res) => {
 });
 
 const connectedUsers = {};
-
-io.of("privgroup").on("connection", (socket) => {
-  console.log("New privated group created");
-});
 
 io.on("connection", (socket) => {
   console.log(`A user connected with ${socket.id}`);
@@ -68,6 +64,16 @@ io.on("connection", (socket) => {
     delete connectedUsers[socket.id];
     io.emit("users list", connectedUsers);
     console.log("Connected User", connectedUsers);
+  });
+});
+
+// creating and connecting to a new Namespace
+io.of("privgroup").on("connection", (socket) => {
+  console.log(`New privated group created with ${socket.id}`);
+
+  socket.on("new user", (username) => {
+    console.log(`${username} has joined the group`);
+    socket.broadcast.emit('new user', username)
   });
 });
 

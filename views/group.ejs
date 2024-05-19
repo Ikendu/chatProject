@@ -12,5 +12,22 @@
   <body>
     <h1><%= name %> Group</h1>
     <h3>You are welcome</h3>
+    <div id="gridContainer">
+      <div id="chatApp">
+        <p id="connectionStatus"></p>
+        <p id="typing"></p>
+        <ul id="messages"></ul>
+      </div>
+      <div id="listOfUsers">
+        <h1>Connected Users</h1>
+        <ul id="connectedUsers"></ul>
+      </div>
+      <div>
+        <form id="grpMsgForm">
+          <input id="grpMsgInput" />
+          <button>Broadcast</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>
