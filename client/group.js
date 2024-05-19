@@ -4,10 +4,12 @@ const username = prompt("Welcome, Please enter you name");
 
 const input = document.getElementById("grpMsgInput");
 input.oninput = (e) => {
-    socket.emit('is typing', username)
-}
-
-
+  socket.emit("is typing", username);
+};
+socket.on("is typing", (username) => {
+  const typing = document.getElementById("typing");
+  typing.innerText = `${username} is typing`;
+});
 
 socket.on("connect", () => {
   console.log(`A new user connected with id ${socket.id}`);

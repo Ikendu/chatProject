@@ -73,7 +73,11 @@ io.of("privgroup").on("connection", (socket) => {
 
   socket.on("new user", (username) => {
     console.log(`${username} has joined the group`);
-    socket.broadcast.emit('new user', username)
+    socket.broadcast.emit("new user", username);
+  });
+
+  socket.on("is typing", (username) => {
+    socket.broadcast.emit("is typing", username);
   });
 });
 
