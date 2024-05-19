@@ -85,9 +85,9 @@ socket.on("connect", () => {
             const msg = input.value;
             if (msg) {
               socket.emit("privateMsg", socket.id, id, socket.nickname, msg);
+              messaging(privMsgArea, "Me", msg);
+              input.value = "";
             }
-            messaging(privMsgArea, "Me", msg);
-            input.value = "";
           };
         } else {
           alert(`Already connected with ${nickname}`);
@@ -132,10 +132,9 @@ socket.on("connect", () => {
         if (msg) {
           const msgArea = document.getElementById(senderID);
           messaging(msgArea, "Me", msg);
+          socket.emit("privateMsg", socket.id, senderID, socket.nickname, msg);
+          input.value = "";
         }
-
-        socket.emit("privateMsg", socket.id, senderID, socket.nickname, msg);
-        input.value = "";
       };
     } else {
       const mesgArea = document.getElementById(senderID);
@@ -178,3 +177,10 @@ socket.on("connect", () => {
     alert(`${userName} with id ${userID} has disconnected`);
   });
 });
+
+const createGrp = document.getElementById("createGrp");
+createGrp.onclick = () => {
+  const newgroup = prompt("Enter the group name");
+  const url = `/privgroup/${newgroup}`;
+  window.open(url, "_blank");
+};

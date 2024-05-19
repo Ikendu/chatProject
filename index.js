@@ -7,11 +7,15 @@ const io = new Server(server);
 
 app.use(express.static("client"));
 
-// app.get("/", (req, res) => {
-//   res.sendFile(__dirname + "/client/");
-// });
+app.get("/privgroup", (req, res) => {
+  res.sendFile(__dirname + "/client/private");
+});
 
 const connectedUsers = {};
+
+io.of("privgroup").on("connection", (socket) => {
+  console.log("New privated group created");
+});
 
 io.on("connection", (socket) => {
   console.log(`A user connected with ${socket.id}`);
