@@ -79,6 +79,9 @@ io.of("privgroup").on("connection", (socket) => {
   socket.on("is typing", (username) => {
     socket.broadcast.emit("is typing", username);
   });
+  socket.on("not typing", (username) => {
+    socket.broadcast.emit("not typing", username);
+  });
 });
 
 const port = 3001;
