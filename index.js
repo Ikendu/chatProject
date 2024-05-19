@@ -3,12 +3,27 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const { v4: generateRandomId } = require("uuid");
+
 const io = new Server(server);
 
 app.use(express.static("client"));
 
-app.get("/privgroup", (req, res) => {
-  res.sendFile(__dirname + "/client/private");
+app.set("view engine", "ejs");
+
+//generate an id for a new group
+app.get("/privgroup/:name", (req, res) => {
+  const name = req.params.name;
+  const grpid = generateRandomId();
+  res.redirect(`/privgroup/${name}/${grpid}`);
+  // res.sendFile(__dirname + "/client/private.html");
+});
+//redirected to the new group
+app.get("/privgroup/:name/:grpid", (req, res) => {
+  const name = req.params.name;
+  const grpid = req.params.grpid;
+
+  res.render(`group`, { name, grpid });
 });
 
 const connectedUsers = {};
