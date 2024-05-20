@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("isTyping", user);
   });
 
-   socket.on("userNotType", (user) => {
+  socket.on("userNotType", (user) => {
     socket.broadcast.emit("userNotType");
   });
 
@@ -70,3 +70,19 @@ io.on("connection", (socket) => {
 // creating and connecting to a new Namespace
 io.of("privgroup").on("connection", (socket) => {
   console.log(`New privated group created with ${socket.id}`);
+
+  socket.on("new user", (username) => {
+    console.log(`${username} has joined the group`);
+    socket.broadcast.emit("new user", username);
+  });
+
+  socket.on("is typing", (username) => {
+    socket.broadcast.emit("is typing", username);
+  });
+  socket.on("not typing", (username) => {
+    socket.broadcast.emit("not typing", username);
+  });
+});
+
+const port = 3001;
+server.listen(port, () => console.log(`connected at post ${port}`));
