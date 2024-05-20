@@ -48,3 +48,25 @@ io.on("connection", (socket) => {
   socket.on("isTyping", (user) => {
     socket.broadcast.emit("isTyping", user);
   });
+
+   socket.on("userNotType", (user) => {
+    socket.broadcast.emit("userNotType");
+  });
+
+  socket.on("privateMsg", (senderID, recID, senderName, msg) => {
+    socket.to(recID).emit("recMessage", senderID, senderName, msg);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`A user with ID ${socket.id} disconnected`);
+    //alert others when a user disconnects
+    socket.broadcast.emit("user disconnect", socket.id, socket.nickname);
+    delete connectedUsers[socket.id];
+    io.emit("users list", connectedUsers);
+    console.log("Connected User", connectedUsers);
+  });
+});
+
+// creating and connecting to a new Namespace
+io.of("privgroup").on("connection", (socket) => {
+  console.log(`New privated group created with ${socket.id}`);
