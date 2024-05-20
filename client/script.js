@@ -72,4 +72,24 @@ socket.on("connect", () => {
           //create button
           const sendBtn = document.createElement("button");
           sendBtn.type = "submit";
-          sendBtn.innerText = "Send";
+          sendBtn.innerText = "Send";          //append and build private message area
+          privMsgArea.appendChild(privHeading);
+          privMsgArea.appendChild(input);
+          privMsgArea.appendChild(sendBtn);
+          privateMsgs.appendChild(privMsgArea);
+
+          sendBtn.onclick = (e) => {
+            e.preventDefault();
+            const msg = input.value;
+            if (msg) {
+              socket.emit("privateMsg", socket.id, id, socket.nickname, msg);
+              messaging(privMsgArea, "Me", msg);
+              input.value = "";
+            }
+          };
+        } else {
+          alert(`Already connected with ${nickname}`);
+        }
+      };
+    }
+  });
