@@ -72,7 +72,7 @@ socket.on("connect", () => {
           //create button
           const sendBtn = document.createElement("button");
           sendBtn.type = "submit";
-          sendBtn.innerText = "Send";          //append and build private message area
+          sendBtn.innerText = "Send"; //append and build private message area
           privMsgArea.appendChild(privHeading);
           privMsgArea.appendChild(input);
           privMsgArea.appendChild(sendBtn);
@@ -93,7 +93,7 @@ socket.on("connect", () => {
       };
     }
   });
- // recieving private chat
+  // recieving private chat
   socket.on("recMessage", (senderID, senderName, msg) => {
     if (!usersTalkingPrivately[senderID]) {
       usersTalkingPrivately[senderID] = senderName;
@@ -139,4 +139,45 @@ socket.on("connect", () => {
     }
   });
 
-  
+  const isTyping = document.getElementById("typing");
+  input.oninput = () => {
+    socket.emit("isTyping", socket.nickname);
+  };
+
+  socket.on("isTyping", (user) => {
+    isTyping.innerText = `${user} is typing`;
+  });
+
+  input.onchange = () => {
+    socket.emit("userNotType", socket.nickname);
+  };
+  socket.on("userNotType", () => {
+    isTyping.innerText = "";
+  });
+
+  //send group message to serv
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    if (input.value) {
+      const msg = input.value;
+      socket.emit("group message", socket.nickname, msg);
+      messaging(messages, "Me: ", msg);
+      input.value = "";
+    }
+  };
+  //display message for all users
+  socket.on("group message", (nickname, msg) => {
+    messaging(messages, nickname, msg);
+  });
+
+  socket.on("user disconnect", (userID, userName) => {
+    alert(`${userName} with id ${userID} has disconnected`);
+  });
+});
+
+const createGrp = document.getElementById("createGrp");
+createGrp.onclick = () => {
+  const newgroup = prompt("Enter the group name");
+  const url = `/privgroup/${newgroup}`;
+  window.open(url, "_blank");
+};
