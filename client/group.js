@@ -106,8 +106,11 @@ socket.on("connect", () => {
       alert(
         `Good bye 👋👋${socket.nickname} you can join again using the group link `
       );
-      socket.disconnect()
-    } else if(answer === )
-
+      socket.disconnect();
+      window.location.href = "about:blank";
+      window.top.close();
+    } else if (answer === "no" || answer === "No" || answer === "NO") {
+      alert(`You are still an associate of ${grpName}`);
+    }
   };
 });
