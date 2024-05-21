@@ -84,32 +84,18 @@ socket.on("connect", () => {
   const leave = document.getElementById("leave");
 
   leave.onclick = () => {
-    let answer = prompt(
-      `${socket.nickname} are you sure you want to leave ${grpName} associate🤨 \n Reply with yes or no`
+    let answer = confirm(
+      `${socket.nickname} are you sure you want to leave ${grpName} associate🤨`
     );
 
-    while (
-      answer !== "yes" &&
-      answer !== "Yes" &&
-      answer !== "no" &&
-      answer !== "No" &&
-      answer !== "YES" &&
-      answer !== "NO"
-    ) {
-      alert("invalid entry 🙈🙈 try again");
-
-      answer = prompt(
-        `${socket.nickname} are you sure you want to leave ${grpName} associate \n Reply with yes or no`
-      );
-    }
-    if (answer === "yes" || answer === "Yes" || answer === "YES") {
+    if (answer) {
       alert(
         `Good bye 👋👋${socket.nickname} you can join again using the group link `
       );
       socket.disconnect();
       window.location.href = "about:blank";
       window.top.close();
-    } else if (answer === "no" || answer === "No" || answer === "NO") {
+    } else {
       alert(`You are still an associate of ${grpName}`);
     }
   };
