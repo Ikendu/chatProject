@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/group.css" />
     <script src="/socket.io/socket.io.js" defer></script>
+    <script>
+      const grpID = "<%= grpid %>";
+      const grpName = "<%= name %>";
+    </script>
     <script src="/group.js" defer></script>
 
     <title><%= name %> Group 😏😊</title>
@@ -12,6 +16,7 @@
   <body>
     <h1><%= name %> Group</h1>
     <h3>You are welcome</h3>
+    <button id="leave">Leave group</button>
     <div id="gridContainer">
       <div id="chatApp">
         <p id="connectionStatus"></p>

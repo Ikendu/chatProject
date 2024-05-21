@@ -72,7 +72,9 @@ socket.on("connect", () => {
           //create button
           const sendBtn = document.createElement("button");
           sendBtn.type = "submit";
-          sendBtn.innerText = "Send"; //append and build private message area
+          sendBtn.innerText = "Send";
+
+          //append and build private message area
           privMsgArea.appendChild(privHeading);
           privMsgArea.appendChild(input);
           privMsgArea.appendChild(sendBtn);
@@ -93,6 +95,7 @@ socket.on("connect", () => {
       };
     }
   });
+
   // recieving private chat
   socket.on("recMessage", (senderID, senderName, msg) => {
     if (!usersTalkingPrivately[senderID]) {

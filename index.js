@@ -68,19 +68,64 @@ io.on("connection", (socket) => {
 });
 
 // creating and connecting to a new Namespace
-io.of("privgroup").on("connection", (socket) => {
+const grpNSP = io.of("privgroup");
+grpNSP.on("connection", (socket) => {
   console.log(`New privated group created with ${socket.id}`);
 
-  socket.on("new user", (username) => {
-    console.log(`${username} has joined the group`);
-    socket.broadcast.emit("new user", username);
+  socket.on("sendGroupId", (sendGroupId) => {
+    socket.join(sendGroupId);
   });
 
-  socket.on("is typing", (username) => {
-    socket.broadcast.emit("is typing", username);
+  const socketId = socket.id;
+
+  socket.on("sendUserAndGrpName", (username, grpName, grpId) => {
+    socket.nickname = username;
+    console.log(`${socket.nickname} has joined ${grpName} with ${socketId}`);
+
+    if (!grpNSP.adapter.rooms.get(grpId).connectedUsers) {
+      grpNSP.adapter.rooms.get(grpId).connectedUsers = {};
+    }
+    grpNSP.adapter.rooms.get(grpId).connectedUsers[socketId] = username;
+    console.log(`Connected users from ${grpName} 👇👇👇`);
+    console.log(grpNSP.adapter.rooms.get(grpId).connectedUsers);
+
+    grpNSP
+      .to(grpId)
+      .emit("users list", grpNSP.adapter.rooms.get(grpId).connectedUsers);
+
+    socket.on("disconnect", () => {
+      socket.to(grpId).emit("user left", socket.nickname);
+      if (grpNSP.adapter.rooms.get(grpId)) {
+        delete grpNSP.adapter.rooms.get(grpId).connectedUsers[socketId];
+        console.log(
+          `Remaining users`,
+          grpNSP.adapter.rooms.get(grpId).connectedUsers
+        );
+        socket
+          .to(grpId)
+          .emit("users list", grpNSP.adapter.rooms.get(grpId).connectedUsers);
+      } else {
+        console.log(`Room ${grpName} has been deleted`);
+      }
+    });
   });
-  socket.on("not typing", (username) => {
-    socket.broadcast.emit("not typing", username);
+
+  socket.on("grp message", (msg, username, grpID) => {
+    socket.to(grpID).emit("grp message", msg, username);
+    console.log(msg, username, grpID);
+  });
+
+  socket.on("new user", (username, grpID) => {
+    console.log(`${username} has joined the group`);
+    socket.to(grpID).emit("new user", username);
+  });
+
+  //instead of broadcast we can use the 'to(grpID)' to emit it into the group
+  socket.on("user typing", (username) => {
+    socket.broadcast.emit("user typing", username);
+  });
+  socket.on("user not typing", (username) => {
+    socket.broadcast.emit("user not typing", username);
   });
 });
 
